@@ -24,7 +24,7 @@ public class ECUBot2 extends LinearOpMode {
 
     //region Servo Positions
     private double rotate0ServoPosition = 0.5;
-    private double bin2ServoPosition = 0.0;
+    private double bin2ServoPosition = 0.5;
     private double pivot3ServoPosition = 0.5;
     private double wrist4ServoPosition = 0.5;
     private double claw5ServoPosition = 0.2;
@@ -122,13 +122,13 @@ public class ECUBot2 extends LinearOpMode {
                 bin2ServoPosition = 1.0;
                 bin2Servo.setPosition(bin2ServoPosition);
                 sleep(100);
-                bin2ServoPosition = 0.0;
+                bin2ServoPosition = 0.5;
                 bin2Servo.setPosition(bin2ServoPosition);
             }
 
             //region Servo Range Clip
             rotate0ServoPosition = Range.clip(rotate0ServoPosition, servomin, servomax);
-            bin2ServoPosition = Range.clip(bin2ServoPosition, servomin, servomax);
+            bin2ServoPosition = Range.clip(bin2ServoPosition, 0.5, 1.0);
             pivot3ServoPosition = Range.clip(pivot3ServoPosition, servomin, servomax);
             wrist4ServoPosition = Range.clip(wrist4ServoPosition, servomin, servomax);
             claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.7);
