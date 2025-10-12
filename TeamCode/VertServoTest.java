@@ -38,8 +38,9 @@ public class ServoClawTest extends LinearOpMode {
                 vertical1Servo.setPower(servopower);
             }
 
-
-
+            telemetry.addData("vertical1Servo:", vertical1Servo.getPower);
+            telemetry.update
+                    z
             sleep(20);
         }
     }
