@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "ServoClawTest", group = "FTCROBOTCONTROLLER-JCM-SKILLS-REPO")
-public class ServoClawTest extends LinearOpMode {
+@TeleOp(name = "VertServoTest", group = "FTCROBOTCONTROLLER-JCM-SKILLS-REPO")
+public class VertServoTest extends LinearOpMode {
     private CRServo vertical1Servo;
 
     private double servopower = 0.0;
@@ -22,6 +22,7 @@ public class ServoClawTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
             if (gamepad1.y) { // raise claw
                 servopower = power1;
                 vertical1Servo.setPower(servopower);
@@ -31,7 +32,7 @@ public class ServoClawTest extends LinearOpMode {
             }
 
             if (gamepad1.x) { // lower claw
-                servopower = power1;
+                servopower = -power1;
                 vertical1Servo.setPower(-servopower);
             }   else {
                 servopower = power0;
@@ -40,7 +41,7 @@ public class ServoClawTest extends LinearOpMode {
 
             telemetry.addData("vertical1Servo:", vertical1Servo.getPower);
             telemetry.update
-                    z
+                    
             sleep(20);
         }
     }
