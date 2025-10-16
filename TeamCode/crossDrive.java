@@ -15,7 +15,6 @@ public class crossDrive extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //region Hardware Map Classes
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -23,8 +22,6 @@ public class crossDrive extends LinearOpMode {
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
-
-        //endregion
 
         waitForStart();
 
