@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name = "ECUBot2", group = "FTCROBOTCONTROLLER-JCM-SKILLS-REPO")
 public class ECUBot2 extends LinearOpMode {
     //region Hardware Declarations
-    private Servo rotate0Servo;
+//    private Servo rotate0Servo;
     private CRServo vertical1Servo;
-    private Servo bin2Servo;
+//    private Servo bin2Servo;
     private Servo pivot3Servo;
     private Servo wrist4Servo;
     private Servo claw5Servo;
@@ -23,8 +23,8 @@ public class ECUBot2 extends LinearOpMode {
     //endregion
 
     //region Servo Positions
-    private double rotate0ServoPosition = 0.5;
-    private double bin2ServoPosition = 0.5;
+//    private double rotate0ServoPosition = 0.5;
+//    private double bin2ServoPosition = 0.5;
     private double pivot3ServoPosition = 0.5;
     private double wrist4ServoPosition = 0.5;
     private double claw5ServoPosition = 0.2;
@@ -42,9 +42,9 @@ public class ECUBot2 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         //region Hardware Map Classes
-        rotate0Servo = hardwareMap.get(Servo.class,"rotate0Servo");
+//        rotate0Servo = hardwareMap.get(Servo.class,"rotate0Servo");
         vertical1Servo = hardwareMap.get(CRServo.class,"vertical1Servo");
-        bin2Servo = hardwareMap.get(Servo.class, "bin2Servo");
+//        bin2Servo = hardwareMap.get(Servo.class, "bin2Servo");
         pivot3Servo = hardwareMap.get(Servo.class,"pivot3Servo");
         wrist4Servo = hardwareMap.get(Servo.class,"wrist4Servo");
         claw5Servo = hardwareMap.get(Servo.class,"claw5Servo");
@@ -66,69 +66,59 @@ public class ECUBot2 extends LinearOpMode {
             claw5Servo.setPosition(claw5ServoPosition);
 
             //region Claw Macro Movement
-            if (gamepad1.left_bumper){ // claw left-right rotation
-                if (gamepad1.dpad_left) {
-                    rotate0ServoPosition -= servoincrement;
-                    rotate0Servo.setPosition(rotate0ServoPosition);
-                }
-                if (gamepad1.dpad_right) {
-                    rotate0ServoPosition += servoincrement;
-                    rotate0Servo.setPosition(rotate0ServoPosition);
-                }
-            }
+//            if (gamepad1.left_bumper){ // claw left-right rotation
+//                if (gamepad1.dpad_left) {
+//                    rotate0ServoPosition -= servoincrement;
+//                    rotate0Servo.setPosition(rotate0ServoPosition);
+//                }
+//                if (gamepad1.dpad_right) {
+//                    rotate0ServoPosition += servoincrement;
+//                    rotate0Servo.setPosition(rotate0ServoPosition);
+//                }
+//            }
 
             if (gamepad1.y) { // raise claw
                 servopower = power1;
                 vertical1Servo.setPower(servopower);
-            }   else {
-                servopower = power0;
-                vertical1Servo.setPower(servopower);
-            }
-
-            if (gamepad1.x) { // lower claw
-                servopower = power1;
+            } else if (gamepad1.x) { // lower claw
+                servopower = -power1;
                 vertical1Servo.setPower(-servopower);
             }   else {
                 servopower = power0;
                 vertical1Servo.setPower(servopower);
             }
+
             //endregion
 
             //region Claw Micro Adjustments
-            if (gamepad1.right_bumper) { // claw pivot
-                if (gamepad1.dpad_down) {
+                if (gamepad1.dpad_down) { // pitch down
                     pivot3ServoPosition -= servoincrement;
                     pivot3Servo.setPosition(pivot3ServoPosition);
-                }
-                if (gamepad1.dpad_up) {
+                } else if (gamepad1.dpad_up) { // pitch up
                     pivot3ServoPosition += servoincrement;
                     pivot3Servo.setPosition(pivot3ServoPosition);
                 }
-            }
 
-            if (gamepad1.right_bumper) { // claw rotation
-                if (gamepad1.dpad_left) {
+                if (gamepad1.dpad_left) { // rotate left
                     wrist4ServoPosition -= servoincrement;
                     wrist4Servo.setPosition(wrist4ServoPosition);
-                }
-                if (gamepad1.dpad_right) {
+                } else if (gamepad1.dpad_right) { // rotate right
                     wrist4ServoPosition += servoincrement;
                     wrist4Servo.setPosition(wrist4ServoPosition);
                 }
-            }
             //endregion
 
-            if (gamepad1.a) { // bin activation
-                bin2ServoPosition = 1.0;
-                bin2Servo.setPosition(bin2ServoPosition);
-                sleep(100);
-                bin2ServoPosition = 0.5;
-                bin2Servo.setPosition(bin2ServoPosition);
-            }
+//            if (gamepad1.a) { // bin activation
+//                bin2ServoPosition = 1.0;
+//                bin2Servo.setPosition(bin2ServoPosition);
+//                sleep(100);
+//                bin2ServoPosition = 0.5;
+//                bin2Servo.setPosition(bin2ServoPosition);
+//            }
 
             //region Servo Range Clip
-            rotate0ServoPosition = Range.clip(rotate0ServoPosition, servomin, servomax);
-            bin2ServoPosition = Range.clip(bin2ServoPosition, 0.5, 1.0);
+//            rotate0ServoPosition = Range.clip(rotate0ServoPosition, servomin, servomax);
+//            bin2ServoPosition = Range.clip(bin2ServoPosition, 0.5, 1.0);
             pivot3ServoPosition = Range.clip(pivot3ServoPosition, servomin, servomax);
             wrist4ServoPosition = Range.clip(wrist4ServoPosition, servomin, servomax);
             claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.7);
@@ -158,16 +148,16 @@ public class ECUBot2 extends LinearOpMode {
             //endregion
 
             //region Telemetry
-            telemetry.addData("rotation0Servo:", rotate0Servo.getPosition);
-            telemetry.addData("vertical1Servo:", vertical1Servo.getPower);
-            telemetry.addData ("bin2Servo:", bin2Servo.getPosition);
-            telemetry.addData("pivot3Servo:", pivot3Servo.getPosition);
-            telemetry.addData("wrist4Servo:", wrist4Servo.getPosition);
-            telemetry.addData("claw5Servo:", claw5Servo.getPosition);
+//            telemetry.addData("rotation0Servo:", rotate0ServoPosition);
+            telemetry.addData("vertical1Servo:", servopower);
+//            telemetry.addData ("bin2Servo:", bin2ServoPosition);
+            telemetry.addData("pivot3Servo:", pivot3ServoPosition);
+            telemetry.addData("wrist4Servo:", wrist4ServoPosition);
+            telemetry.addData("claw5Servo:", claw5ServoPosition);
 
-            telemetry.addData("Front Left Power", frontLeft.getPower);
-            telemetry.addData("Front Right Power", frontRight.getPower);
-            telemetry.addData("Back Middle Power", backMiddle.getPower);
+            telemetry.addData("Front Left Power", frontLeftPower);
+            telemetry.addData("Front Right Power", frontRightPower);
+            telemetry.addData("Back Middle Power", backMiddlePower);
 
             telemetry.update();
             //endregion

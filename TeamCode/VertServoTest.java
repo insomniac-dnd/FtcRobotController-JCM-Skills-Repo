@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 
@@ -23,15 +24,12 @@ public class VertServoTest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (gamepad1.y) { // raise claw
-                servopower = power1;
-                vertical1Servo.setPower(servopower);
-            }   else {
-                servopower = power0;
-                vertical1Servo.setPower(servopower);
+            if (gamepad1.x) { // raise claw
+                servopower = -power1;
+                vertical1Servo.setPower(-servopower);
             }
 
-            if (gamepad1.x) { // lower claw
+            else if (gamepad1.y) { // lower claw
                 servopower = -power1;
                 vertical1Servo.setPower(-servopower);
             }   else {
@@ -39,9 +37,9 @@ public class VertServoTest extends LinearOpMode {
                 vertical1Servo.setPower(servopower);
             }
 
-            telemetry.addData("vertical1Servo:", vertical1Servo.getPower);
-            telemetry.update
-                    
+            telemetry.addData("vertical1Servo:", servopower);
+            telemetry.update();
+
             sleep(20);
         }
     }
