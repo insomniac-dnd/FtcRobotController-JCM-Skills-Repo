@@ -82,7 +82,8 @@ public class sqrECUBot extends LinearOpMode {
             if (gamepad1.dpad_down) { // pitch down
                 pivot3ServoPosition -= servoincrement;
                 pivot3Servo.setPosition(pivot3ServoPosition);
-            } else if (gamepad1.dpad_up) { // pitch up
+            }
+            if (gamepad1.dpad_up) { // pitch up
                 pivot3ServoPosition += servoincrement;
                 pivot3Servo.setPosition(pivot3ServoPosition);
             }
@@ -101,7 +102,7 @@ public class sqrECUBot extends LinearOpMode {
 
             pivot3ServoPosition = Range.clip(pivot3ServoPosition, servomin, servomax);
             wrist4ServoPosition = Range.clip(wrist4ServoPosition, servomin, servomax);
-            claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.7);
+            claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.5);
 
             //endregion
 
@@ -146,7 +147,7 @@ public class sqrECUBot extends LinearOpMode {
             telemetry.addData("Front Left Power", frontLeftPower);
             telemetry.addData("Front Right Power", frontRightPower);
             telemetry.addData("Back Left Power", backLeftPower);
-            telemetry.addData("Back Right Power", backRighttPower);
+            telemetry.addData("Back Right Power", backRightPower);
 
             telemetry.update();
 
