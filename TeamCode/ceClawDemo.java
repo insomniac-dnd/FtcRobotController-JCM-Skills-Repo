@@ -88,7 +88,7 @@ public class sqrECUBot extends LinearOpMode {
 
             pivot3ServoPosition = Range.clip(pivot3ServoPosition, servomin, servomax);
             wrist4ServoPosition = Range.clip(wrist4ServoPosition, servomin, servomax);
-            claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.7);
+            claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.5);
 
             //endregion
 
