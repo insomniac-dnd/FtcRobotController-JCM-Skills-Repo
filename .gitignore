@@ -79,3 +79,11 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+TeamCode/ECUBot.java
+TeamCode/KiwiDriveTest.java
+TeamCode/ServoClawTest.java
+TeamCode/ServoArmTest.java
+TeamCode/GamepadTest.java
+VertServoTest.java
+PuzzleBot.java
+KiwiDriveTest2.java
