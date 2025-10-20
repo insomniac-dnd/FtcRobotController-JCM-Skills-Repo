@@ -59,7 +59,7 @@ public class sqrECUBot extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            claw5ServoPosition = gamepad1.right_trigger;
+            claw5ServoPosition = gamepad1.right_trigger*0.65;
             claw5Servo.setPosition(claw5ServoPosition);
 
             //region Claw Macro Movement
@@ -69,7 +69,7 @@ public class sqrECUBot extends LinearOpMode {
                 vertical1Servo.setPower(servopower);
             } else if (gamepad1.x) { // lower claw
                 servopower = -power1;
-                vertical1Servo.setPower(-servopower);
+                vertical1Servo.setPower(servopower);
             }   else {
                 servopower = power0;
                 vertical1Servo.setPower(servopower);
@@ -80,11 +80,11 @@ public class sqrECUBot extends LinearOpMode {
             //region Claw Micro Adjustments
 
             if (gamepad1.dpad_down) { // pitch down
-                pivot3ServoPosition -= servoincrement;
+                pivot3ServoPosition += servoincrement;
                 pivot3Servo.setPosition(pivot3ServoPosition);
             }
             if (gamepad1.dpad_up) { // pitch up
-                pivot3ServoPosition += servoincrement;
+                pivot3ServoPosition -= servoincrement;
                 pivot3Servo.setPosition(pivot3ServoPosition);
             }
 
