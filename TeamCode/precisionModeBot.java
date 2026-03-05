@@ -8,14 +8,13 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "sqrECUBot", group = "FTCROBOTCONTROLLER-JCM-SKILLS-REPO")
-public class sqrECUBot extends LinearOpMode {
+@TeleOp(name = "ECUBotv26", group = "FTCROBOTCONTROLLER-JCM-SKILLS-REPO")
+public class ECUBotv26 extends LinearOpMode {
     //region Hardware Declarations
     private CRServo vertical1Servo;
-    private Servo bin2Servo;
     private Servo pivot3Servo;
     private Servo wrist4Servo;
-    private Servo claw5Servo;
+    private CRServo claw5Servo;
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -23,30 +22,30 @@ public class sqrECUBot extends LinearOpMode {
     //endregion
 
     //region Servo Positions
-    private double bin2ServoPosition = 0.0;
     private double pivot3ServoPosition = 0.5;
     private double wrist4ServoPosition = 0.5;
-    private double claw5ServoPosition = 0.2;
     //endregion
 
     //region Servo Variables
-    private final double servoincrement = 0.05;
+    private final double servoincrement = 0.01;
     private final double servomin = 0.0;
     private final double servomax = 1.0;
+    private double clawPower = 0.0;
     private double servopower = 0.0;
     private double power1 = 1.0;
     private double power0 = 0.0;
     //endregion
+
+    private boolean PrecisionMode = false;
     @Override
     public void runOpMode() throws InterruptedException {
 
         //region Hardware Map Classes
 
         vertical1Servo = hardwareMap.get(CRServo.class,"vertical1Servo");
-        bin2Servo = hardwareMap.get(Servo.class,"bin2Servo");
         pivot3Servo = hardwareMap.get(Servo.class,"pivot3Servo");
         wrist4Servo = hardwareMap.get(Servo.class,"wrist4Servo");
-        claw5Servo = hardwareMap.get(Servo.class,"claw5Servo");
+        claw5Servo = hardwareMap.get(CRServo.class,"claw5Servo");
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
@@ -62,15 +61,30 @@ public class sqrECUBot extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            claw5ServoPosition = gamepad1.right_trigger*0.65;
-            claw5Servo.setPosition(claw5ServoPosition);
+            double threshold = 0.5;
+
+            if (gamepad1.right_trigger > threshold) {
+                servopower = power1;      // set servo speed
+                clawPower = power1;
+                claw5Servo.setPower(servopower);
+            }
+            else if (gamepad1.left_trigger > threshold) {
+                servopower = -power1;
+                clawPower = -power1;
+                claw5Servo.setPower(servopower);
+            }
+            else {
+                servopower = power0;      // 0 for stop
+                claw5Servo.setPower(servopower);
+            }
+
 
             //region Claw Macro Movement
 
-            if (gamepad1.y) { // raise claw
+            if (gamepad1.x) { // raise claw
                 servopower = power1;
                 vertical1Servo.setPower(servopower);
-            } else if (gamepad1.x) { // lower claw
+            } else if (gamepad1.y) { // lower claw
                 servopower = -power1;
                 vertical1Servo.setPower(servopower);
             }   else {
@@ -83,11 +97,11 @@ public class sqrECUBot extends LinearOpMode {
             //region Claw Micro Adjustments
 
             if (gamepad1.dpad_down) { // pitch down
-                pivot3ServoPosition += servoincrement;
+                pivot3ServoPosition -= servoincrement;
                 pivot3Servo.setPosition(pivot3ServoPosition);
             }
             if (gamepad1.dpad_up) { // pitch up
-                pivot3ServoPosition -= servoincrement;
+                pivot3ServoPosition += servoincrement;
                 pivot3Servo.setPosition(pivot3ServoPosition);
             }
 
@@ -99,22 +113,14 @@ public class sqrECUBot extends LinearOpMode {
                 wrist4Servo.setPosition(wrist4ServoPosition);
             }
 
-            if (gamepad1.a) {
-                bin2ServoPosition = 0.5;
-                bin2Servo.setPosition(bin2ServoPosition);
-                sleep(400);
-                bin2ServoPosition = 0.0;
-                bin2Servo.setPosition(bin2ServoPosition);
-            }
 
-            //endregion
 
             //region Servo Range Clip
 
-            bin2ServoPosition = Range.clip(bin2ServoPosition, 0.0, 1.0);
             pivot3ServoPosition = Range.clip(pivot3ServoPosition, servomin, servomax);
             wrist4ServoPosition = Range.clip(wrist4ServoPosition, servomin, servomax);
-            claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.5);
+
+            //endregion
 
             //endregion
 
@@ -142,6 +148,21 @@ public class sqrECUBot extends LinearOpMode {
                 backRightPower /= max;
             }
 
+            if (gamepad1.a) {
+                if (PrecisionMode == true) {
+                    PrecisionMode = false;
+                } else if (PrecisionMode == false) {
+                    PrecisionMode = true;
+                }
+            }
+
+            if (PrecisionMode == true) {
+                frontLeftPower /= 3;
+                frontRightPower /= 3;
+                backLeftPower /= 3;
+                backRightPower /= 3;
+            }
+
             frontLeft.setPower(frontLeftPower);
             backLeft.setPower(backLeftPower);
             frontRight.setPower(frontRightPower);
@@ -151,10 +172,12 @@ public class sqrECUBot extends LinearOpMode {
 
             //region Telemetry
 
+            telemetry.addData("Precision Mode Active:", PrecisionMode);
+
             telemetry.addData("vertical1Servo:", servopower);
             telemetry.addData("pivot3Servo:", pivot3ServoPosition);
             telemetry.addData("wrist4Servo:", wrist4ServoPosition);
-            telemetry.addData("claw5Servo:", claw5ServoPosition);
+            telemetry.addData("claw5Servo:", clawPower);
 
             telemetry.addData("Front Left Power", frontLeftPower);
             telemetry.addData("Front Right Power", frontRightPower);

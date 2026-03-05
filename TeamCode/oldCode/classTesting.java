@@ -8,11 +8,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "sqrECUBot", group = "FTCROBOTCONTROLLER-JCM-SKILLS-REPO")
-public class sqrECUBot extends LinearOpMode {
+@TeleOp(name = "multiClassTesting", group = "FTCROBOTCONTROLLER-JCM-SKILLS-REPO")
+public class classTesting extends LinearOpMode {
     //region Hardware Declarations
     private CRServo vertical1Servo;
-    private Servo bin2Servo;
     private Servo pivot3Servo;
     private Servo wrist4Servo;
     private Servo claw5Servo;
@@ -23,7 +22,6 @@ public class sqrECUBot extends LinearOpMode {
     //endregion
 
     //region Servo Positions
-    private double bin2ServoPosition = 0.0;
     private double pivot3ServoPosition = 0.5;
     private double wrist4ServoPosition = 0.5;
     private double claw5ServoPosition = 0.2;
@@ -43,7 +41,6 @@ public class sqrECUBot extends LinearOpMode {
         //region Hardware Map Classes
 
         vertical1Servo = hardwareMap.get(CRServo.class,"vertical1Servo");
-        bin2Servo = hardwareMap.get(Servo.class,"bin2Servo");
         pivot3Servo = hardwareMap.get(Servo.class,"pivot3Servo");
         wrist4Servo = hardwareMap.get(Servo.class,"wrist4Servo");
         claw5Servo = hardwareMap.get(Servo.class,"claw5Servo");
@@ -55,6 +52,11 @@ public class sqrECUBot extends LinearOpMode {
 
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        class clawPitchUp extends OpMode {
+            pivot3ServoPosition -= servoincrement;
+            pivot3Servo.setPosition(pivot3ServoPosition);
+        }
 
         //endregion
 
@@ -87,8 +89,7 @@ public class sqrECUBot extends LinearOpMode {
                 pivot3Servo.setPosition(pivot3ServoPosition);
             }
             if (gamepad1.dpad_up) { // pitch up
-                pivot3ServoPosition -= servoincrement;
-                pivot3Servo.setPosition(pivot3ServoPosition);
+                clawPitchUp
             }
 
             if (gamepad1.dpad_left) { // rotate left
@@ -99,19 +100,10 @@ public class sqrECUBot extends LinearOpMode {
                 wrist4Servo.setPosition(wrist4ServoPosition);
             }
 
-            if (gamepad1.a) {
-                bin2ServoPosition = 0.5;
-                bin2Servo.setPosition(bin2ServoPosition);
-                sleep(400);
-                bin2ServoPosition = 0.0;
-                bin2Servo.setPosition(bin2ServoPosition);
-            }
-
             //endregion
 
             //region Servo Range Clip
 
-            bin2ServoPosition = Range.clip(bin2ServoPosition, 0.0, 1.0);
             pivot3ServoPosition = Range.clip(pivot3ServoPosition, servomin, servomax);
             wrist4ServoPosition = Range.clip(wrist4ServoPosition, servomin, servomax);
             claw5ServoPosition = Range.clip(claw5ServoPosition, 0.2, 0.5);

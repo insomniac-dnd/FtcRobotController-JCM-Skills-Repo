@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.teamcode.DriveTrain;
+import org.firstinspires.ftc.teamcode.ClawLift;
+import org.firstinspires.ftc.teamcode.Claw;
+//import org.firstinspires.ftc.teamcode.DebrisBin;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,7 +18,6 @@ public class ECUClassTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // Initialize subsystems
         driveTrain = new DriveTrain(hardwareMap);
         clawLift = new ClawLift(hardwareMap);
         claw = new Claw(hardwareMap);
@@ -21,7 +25,6 @@ public class ECUClassTesting extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            // Each subsystem handles its own logic
             driveTrain.drive(gamepad1);
             clawLift.update(gamepad1);
             claw.update(gamepad1);
