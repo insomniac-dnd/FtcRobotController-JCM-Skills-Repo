@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.Range;
 public class slidingClawBot extends LinearOpMode {
     //region Hardware Declarations
     private CRServo vertical1Servo;
-    private Servo bin2Servo;
     private Servo pivot3Servo;
     private Servo wrist4Servo;
     private CRServo claw5Servo;
@@ -23,28 +22,26 @@ public class slidingClawBot extends LinearOpMode {
     //endregion
 
     //region Servo Positions
-    private double bin2ServoPosition = 0.0;
     private double pivot3ServoPosition = 0.5;
     private double wrist4ServoPosition = 0.5;
     //endregion
 
     //region Servo Variables
-    private final double servoincrement = 0.005;
+    private final double servoincrement = 0.008;
     private final double servomin = 0.0;
     private final double servomax = 1.0;
     private double clawPower = 0.0;
-    private double servopower = 0.0;
+    private double servopower = 0.0;-
     private double power1 = 1.0;
     private double power0 = 0.0;
-
     //endregion
+    private boolean PrecisionMode = false;
     @Override
     public void runOpMode() throws InterruptedException {
 
         //region Hardware Map Classes
 
         vertical1Servo = hardwareMap.get(CRServo.class,"vertical1Servo");
-        bin2Servo = hardwareMap.get(Servo.class,"bin2Servo");
         pivot3Servo = hardwareMap.get(Servo.class,"pivot3Servo");
         wrist4Servo = hardwareMap.get(Servo.class,"wrist4Servo");
         claw5Servo = hardwareMap.get(CRServo.class,"claw5Servo");
@@ -115,17 +112,10 @@ public class slidingClawBot extends LinearOpMode {
                 wrist4Servo.setPosition(wrist4ServoPosition);
             }
 
-            if (gamepad1.a) {
-                bin2ServoPosition = 0.5;
-                bin2Servo.setPosition(bin2ServoPosition);
-                sleep(400);
-                bin2ServoPosition = 0.0;
-                bin2Servo.setPosition(bin2ServoPosition);
-            }
+
 
             //region Servo Range Clip
 
-            bin2ServoPosition = Range.clip(bin2ServoPosition, servomin, servomax);
             pivot3ServoPosition = Range.clip(pivot3ServoPosition, servomin, servomax);
             wrist4ServoPosition = Range.clip(wrist4ServoPosition, servomin, servomax);
 
@@ -157,14 +147,31 @@ public class slidingClawBot extends LinearOpMode {
                 backRightPower /= max;
             }
 
-            frontLeft.setPower(frontLeftPower/2);
-            backLeft.setPower(backLeftPower/2);
-            frontRight.setPower(frontRightPower/2);
-            backRight.setPower(backRightPower/2);
+            if (gamepad1.a) {
+                if (PrecisionMode == true) {
+                    PrecisionMode = false;
+                } else if (PrecisionMode == false) {
+                    PrecisionMode = true;
+                }
+            }
+
+            if (PrecisionMode == true) {
+                frontLeftPower /= 2.5;
+                frontRightPower /= 2.5;
+                backLeftPower /= 2.5;
+                backRightPower /= 2.5;
+            }
+
+            frontLeft.setPower(frontLeftPower);
+            backLeft.setPower(backLeftPower);
+            frontRight.setPower(frontRightPower);
+            backRight.setPower(backRightPower);
 
             //endregion
 
             //region Telemetry
+
+            telemetry.addData("Precision Mode Active:", PrecisionMode);
 
             telemetry.addData("vertical1Servo:", servopower);
             telemetry.addData("pivot3Servo:", pivot3ServoPosition);
